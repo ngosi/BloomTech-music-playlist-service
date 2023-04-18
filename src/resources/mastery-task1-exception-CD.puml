@@ -1,0 +1,21 @@
+@startuml
+
+exception RuntimeException
+
+exception AlbumTrackNotFoundException {
+    -{static} serialVersionUID: long
+}
+
+exception InvalidAttributeException {
+    -{static} serialVersionUID: long
+}
+
+exception PlaylistNotFoundException {
+    -{static} serialVersionUID: long
+}
+
+RuntimeException <|-- AlbumTrackNotFoundException
+RuntimeException <|-- InvalidAttributeException
+RuntimeException <|-- PlaylistNotFoundException
+
+@enduml

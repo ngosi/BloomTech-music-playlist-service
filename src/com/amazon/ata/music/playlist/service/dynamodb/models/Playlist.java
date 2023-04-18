@@ -2,12 +2,10 @@ package com.amazon.ata.music.playlist.service.dynamodb.models;
 
 import com.amazon.ata.music.playlist.service.converters.AlbumTrackLinkedListConverter;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a record in the playlists table.
@@ -15,6 +13,10 @@ import java.util.List;
 @DynamoDBTable(tableName = "playlists")
 public class Playlist {
     private String id;
+    private String name;
+    private String customerId;
+    private int songCount;
+    private Set<String> tags;
     private List<AlbumTrack> songList;
 
     @DynamoDBHashKey(attributeName = "id")
@@ -24,6 +26,39 @@ public class Playlist {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @DynamoDBRangeKey(attributeName = "name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getSongCount() {
+        return songCount;
+    }
+
+    public void setSongCount(int songCount) {
+        this.songCount = songCount;
+    }
+
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
     }
 
     // PARTICIPANTS: You do not need to modify the songList getters/setters or annotations

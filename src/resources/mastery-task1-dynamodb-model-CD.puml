@@ -1,0 +1,25 @@
+@startuml
+
+class Playlist {
+    -id: String @DynamoDBHashKey
+    -name: String @DynamoDBRangeKey
+    -customerId: String
+    -songCount: Integer
+    -tags: HashSet<String>
+    -songList: List<AlbumTrack>
+    +getId() String
+    +setId(String id)
+    +getSongList() List<AlbumTrack>
+    +setSongList(List<AlbumTrack> songList)
+}
+
+class AlbumTrack {
+    -asin: String @DynamoDBHashKey
+    -trackNumber: Integer @DynamoDBRangeKey
+    -albumName: String
+    -songTitle: String
+}
+
+Playlist *-- AlbumTrack
+
+@enduml

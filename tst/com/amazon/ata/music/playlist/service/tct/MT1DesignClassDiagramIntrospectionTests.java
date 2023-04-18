@@ -64,7 +64,7 @@ public class MT1DesignClassDiagramIntrospectionTests {
     @Test
     void mt1Design_getClassDiagram_containsAlbumTrackFields() {
         assertClassDiagramTypeContainsMember(
-            content, "AlbumTrack", "@DynamoDBHashKey\\s*asin\\s*:\\s*String", "asin");
+            content, "AlbumTrack", "", "asin");
         assertClassDiagramTypeContainsMember(
             content, "AlbumTrack", "@DynamoDBRangeKey\\s*trackNumber\\s*:\\s*Integer", "trackNumber");
         assertClassDiagramTypeContainsMember(

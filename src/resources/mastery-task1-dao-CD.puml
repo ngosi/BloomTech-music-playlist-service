@@ -1,0 +1,12 @@
+@startuml
+
+class PlaylistDao {
+    -dynamoDbMapper: DynamoDBMapper
+    +getPlaylist(String id) Playlist
+}
+
+class AlbumTrackDao {
+    -dynamoDbMapper: DynamoDBMapper
+}
+
+@enduml

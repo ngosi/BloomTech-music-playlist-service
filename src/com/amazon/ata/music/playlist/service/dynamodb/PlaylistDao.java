@@ -1,9 +1,15 @@
 package com.amazon.ata.music.playlist.service.dynamodb;
 
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
 
+import com.amazon.ata.music.playlist.service.models.requests.CreatePlaylistRequest;
+import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Accesses data for a playlist using {@link Playlist} to represent the model in DynamoDB.
@@ -32,6 +38,25 @@ public class PlaylistDao {
         if (playlist == null) {
             throw new PlaylistNotFoundException("Could not find playlist with id " + id);
         }
+
+        return playlist;
+    }
+
+    public Playlist savePlaylist(CreatePlaylistRequest createPlaylistRequest) {
+        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getName())) {
+            throw new InvalidAttributeValueException("Invalid name provided. Must not contain \", ', or \\.");
+        }
+        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getCustomerId())) {
+            throw new InvalidAttributeValueException("Invalid customerId provided. Must not contain \", ', or \\.");
+        }
+
+        Playlist playlist = new Playlist();
+        playlist.setId(MusicPlaylistServiceUtils.generatePlaylistId());
+        playlist.setName(createPlaylistRequest.getName());
+        playlist.setCustomerId(createPlaylistRequest.getCustomerId());
+        playlist.setSongCount(0);
+        playlist.setTags((createPlaylistRequest.getTags().size() == 0) ? null : new HashSet<>(createPlaylistRequest.getTags()));
+        playlist.setSongList(new ArrayList<>());
 
         return playlist;
     }

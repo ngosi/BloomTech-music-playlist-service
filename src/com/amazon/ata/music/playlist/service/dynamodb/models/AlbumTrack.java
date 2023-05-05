@@ -1,5 +1,6 @@
 package com.amazon.ata.music.playlist.service.dynamodb.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
@@ -34,6 +35,7 @@ public class AlbumTrack {
         this.trackNumber = trackNumber;
     }
 
+    @DynamoDBAttribute(attributeName = "album_name")
     public String getAlbumName() {
         return albumName;
     }
@@ -42,6 +44,7 @@ public class AlbumTrack {
         this.albumName = albumName;
     }
 
+    @DynamoDBAttribute(attributeName = "song_title")
     public String getSongTitle() {
         return songTitle;
     }

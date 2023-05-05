@@ -34,7 +34,6 @@ public class PlaylistDao {
      */
     public Playlist getPlaylist(String id) {
         Playlist playlist = this.dynamoDbMapper.load(Playlist.class, id);
-
         if (playlist == null) {
             throw new PlaylistNotFoundException("Could not find playlist with id " + id);
         }
@@ -43,13 +42,6 @@ public class PlaylistDao {
     }
 
     public Playlist savePlaylist(CreatePlaylistRequest createPlaylistRequest) {
-        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getName())) {
-            throw new InvalidAttributeValueException("Invalid name provided. Must not contain \", ', or \\.");
-        }
-        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getCustomerId())) {
-            throw new InvalidAttributeValueException("Invalid customerId provided. Must not contain \", ', or \\.");
-        }
-
         Playlist playlist = new Playlist();
         playlist.setId(MusicPlaylistServiceUtils.generatePlaylistId());
         playlist.setName(createPlaylistRequest.getName());

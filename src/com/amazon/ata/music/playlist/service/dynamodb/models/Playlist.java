@@ -2,8 +2,11 @@ package com.amazon.ata.music.playlist.service.dynamodb.models;
 
 import com.amazon.ata.music.playlist.service.converters.AlbumTrackLinkedListConverter;
 
+import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
+import com.amazon.ata.music.playlist.service.util.MusicPlaylistServiceUtils;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,23 +31,33 @@ public class Playlist {
         this.id = id;
     }
 
-    @DynamoDBRangeKey(attributeName = "name")
+    @DynamoDBAttribute(attributeName = "name")
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
+        if (!MusicPlaylistServiceUtils.isValidString(name)) {
+            throw new InvalidAttributeValueException("Invalid name provided. Must not contain \", ', or \\.");
+        }
+
         this.name = name;
     }
 
+    @DynamoDBAttribute(attributeName = "customerId")
     public String getCustomerId() {
         return customerId;
     }
 
     public void setCustomerId(String customerId) {
+        if (!MusicPlaylistServiceUtils.isValidString(customerId)) {
+            throw new InvalidAttributeValueException("Invalid customerId provided. Must not contain \", ', or \\.");
+        }
+
         this.customerId = customerId;
     }
 
+    @DynamoDBAttribute(attributeName = "songCount")
     public int getSongCount() {
         return songCount;
     }
@@ -53,7 +66,12 @@ public class Playlist {
         this.songCount = songCount;
     }
 
+    @DynamoDBTypeConverted(converter = AlbumTrackLinkedListConverter.class)
+    @DynamoDBAttribute(attributeName = "tags")
     public Set<String> getTags() {
+        if (tags == null) {
+            return new HashSet<>();
+        }
         return tags;
     }
 

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * PARTICIPANTS: The class should NOT be touched when working on the project!
@@ -23,6 +24,10 @@ public class AlbumTrackLinkedListConverter implements DynamoDBTypeConverter<Stri
     @Override
     public String convert(List listToBeConverted) {
         return GSON.toJson(listToBeConverted);
+    }
+
+    public String convert(Set setToBeConverted) {
+        return GSON.toJson(setToBeConverted);
     }
 
     @Override

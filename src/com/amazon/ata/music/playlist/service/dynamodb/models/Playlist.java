@@ -66,7 +66,7 @@ public class Playlist {
         this.songCount = songCount;
     }
 
-    @DynamoDBTypeConverted(converter = AlbumTrackLinkedListConverter.class)
+//    @DynamoDBTypeConverted(converter = AlbumTrackLinkedListConverter.class)
     @DynamoDBAttribute(attributeName = "tags")
     public Set<String> getTags() {
         if (tags == null) {
@@ -80,7 +80,7 @@ public class Playlist {
     }
 
     // PARTICIPANTS: You do not need to modify the songList getters/setters or annotations
-    @DynamoDBTypeConverted(converter = AlbumTrackLinkedListConverter.class)
+//    @DynamoDBTypeConverted(converter = AlbumTrackLinkedListConverter.class)
     @DynamoDBAttribute(attributeName = "songList")
     public List<AlbumTrack> getSongList() {
         return songList;

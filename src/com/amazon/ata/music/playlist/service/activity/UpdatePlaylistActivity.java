@@ -65,7 +65,7 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
         }
 
         playlist.setName(updatePlaylistRequest.getName());
-        PlaylistModel playlistModel = new ModelConverter().toPlaylistModel(playlist);
+        PlaylistModel playlistModel = ModelConverter.toPlaylistModel(playlist);
 
         return UpdatePlaylistResult.builder()
                 .withPlaylist(playlistModel)

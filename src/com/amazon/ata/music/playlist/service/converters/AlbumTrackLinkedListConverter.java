@@ -26,10 +26,6 @@ public class AlbumTrackLinkedListConverter implements DynamoDBTypeConverter<Stri
         return GSON.toJson(listToBeConverted);
     }
 
-    public String convert(Set setToBeConverted) {
-        return GSON.toJson(setToBeConverted);
-    }
-
     @Override
     public List unconvert(String dynamoDbRepresentation) {
         // need to provide the type parameter of the list to convert correctly

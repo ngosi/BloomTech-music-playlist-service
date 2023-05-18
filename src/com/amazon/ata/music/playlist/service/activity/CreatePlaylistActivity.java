@@ -54,7 +54,7 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
     public CreatePlaylistResult handleRequest(final CreatePlaylistRequest createPlaylistRequest, Context context) {
         log.info("Received CreatePlaylistRequest {}", createPlaylistRequest);
         Playlist playlist = playlistDao.savePlaylist(createPlaylistRequest);
-        PlaylistModel playlistModel = new ModelConverter().toPlaylistModel(playlist);
+        PlaylistModel playlistModel = ModelConverter.toPlaylistModel(playlist);
 
         return CreatePlaylistResult.builder()
             .withPlaylist(playlistModel)

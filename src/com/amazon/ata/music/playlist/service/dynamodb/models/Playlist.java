@@ -66,7 +66,6 @@ public class Playlist {
         this.songCount = songCount;
     }
 
-//    @DynamoDBTypeConverted(converter = AlbumTrackLinkedListConverter.class)
     @DynamoDBAttribute(attributeName = "tags")
     public Set<String> getTags() {
         if (tags == null) {

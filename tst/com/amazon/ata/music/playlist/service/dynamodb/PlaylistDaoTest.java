@@ -1,6 +1,5 @@
-package com.amazon.ata.music.playlist.service.activity;
+package com.amazon.ata.music.playlist.service.dynamodb;
 
-import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeValueException;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;

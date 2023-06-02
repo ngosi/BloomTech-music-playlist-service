@@ -1,15 +1,16 @@
 package com.amazon.ata.music.playlist.service.activity;
 
-import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
+//import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
+import com.amazon.ata.music.playlist.service.models.SongOrder;
 import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistSongsRequest;
 import com.amazon.ata.music.playlist.service.models.results.GetPlaylistSongsResult;
 import com.amazon.ata.music.playlist.service.models.SongModel;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+//import com.amazonaws.regions.Regions;
+//import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,6 +60,11 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
         log.info("Received GetPlaylistSongsRequest {}", getPlaylistSongsRequest);
         Playlist playlist = playlistDao.getPlaylist(getPlaylistSongsRequest.getId());
         List<SongModel> songs = ModelConverter.toSongModel(playlist.getSongList());
+        if (getPlaylistSongsRequest.getOrder() == SongOrder.REVERSED) {
+            Collections.reverse(songs);
+        } else if (getPlaylistSongsRequest.getOrder() == SongOrder.SHUFFLED) {
+            Collections.shuffle(songs);
+        }
 
         return GetPlaylistSongsResult.builder()
                 .withSongList(songs)

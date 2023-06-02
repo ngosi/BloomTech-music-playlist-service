@@ -1,6 +1,6 @@
 package com.amazon.ata.music.playlist.service.activity;
 
-import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
+//import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
@@ -10,8 +10,8 @@ import com.amazon.ata.music.playlist.service.models.SongModel;
 import com.amazon.ata.music.playlist.service.dynamodb.AlbumTrackDao;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+//import com.amazonaws.regions.Regions;
+//import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -71,10 +72,15 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
 
         Playlist playlist = playlistDao.getPlaylist(addSongToPlaylistRequest.getId());
         AlbumTrack newTrack = albumTrackDao.getAlbumTrack(addSongToPlaylistRequest.getAsin(), addSongToPlaylistRequest.getTrackNumber());
-        playlist.getSongList().add(newTrack);
-        List<SongModel> songs = ModelConverter.toSongModel(playlist.getSongList());
+        LinkedList<AlbumTrack> songList = (LinkedList<AlbumTrack>) playlist.getSongList();
+        if (addSongToPlaylistRequest.isQueueNext()) {
+            songList.add(0, newTrack);
+        } else {
+            songList.add(newTrack);
+        }
 
-        playlistDao.savePlaylist(playlist); // ???
+        List<SongModel> songs = ModelConverter.toSongModel(playlist.getSongList());
+        playlistDao.savePlaylist(playlist);
 
         return AddSongToPlaylistResult.builder()
                 .withSongList(songs)

@@ -1,6 +1,6 @@
 package com.amazon.ata.music.playlist.service.activity;
 
-import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
+//import com.amazon.ata.aws.dynamodb.DynamoDbClientProvider;
 import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.InvalidAttributeChangeException;
@@ -9,7 +9,8 @@ import com.amazon.ata.music.playlist.service.models.requests.UpdatePlaylistReque
 import com.amazon.ata.music.playlist.service.models.results.UpdatePlaylistResult;
 import com.amazon.ata.music.playlist.service.dynamodb.PlaylistDao;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+//import com.amazonaws.regions.Regions;
+//import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +28,10 @@ import javax.inject.Singleton;
 public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequest, UpdatePlaylistResult> {
     private final Logger log = LogManager.getLogger();
     private final PlaylistDao playlistDao;
+
+//    public UpdatePlaylistActivity() {
+//        this.playlistDao = new PlaylistDao(new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient(Regions.US_WEST_2)));
+//    }
 
     /**
      * Instantiates a new UpdatePlaylistActivity object.
@@ -60,15 +65,15 @@ public class UpdatePlaylistActivity implements RequestHandler<UpdatePlaylistRequ
     public UpdatePlaylistResult handleRequest(final UpdatePlaylistRequest updatePlaylistRequest, Context context) {
         log.info("Received UpdatePlaylistRequest {}", updatePlaylistRequest);
         Playlist playlist = playlistDao.getPlaylist(updatePlaylistRequest.getId());
-        if (!playlist.getId().equals(updatePlaylistRequest.getId())) {
-            throw new InvalidAttributeChangeException("Invalid attribute change.");
+        if (!playlist.getCustomerId().equals(updatePlaylistRequest.getCustomerId())) {
+            throw new InvalidAttributeChangeException("Cannot change customer ID of playlist " + playlist.getId());
         }
-
         playlist.setName(updatePlaylistRequest.getName());
-        PlaylistModel playlistModel = ModelConverter.toPlaylistModel(playlist);
+
+        playlistDao.savePlaylist(playlist);
 
         return UpdatePlaylistResult.builder()
-                .withPlaylist(playlistModel)
+                .withPlaylist(ModelConverter.toPlaylistModel(playlist))
                 .build();
     }
 }
